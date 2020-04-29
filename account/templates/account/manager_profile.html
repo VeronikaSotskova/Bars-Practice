@@ -1,0 +1,43 @@
+{% extends 'account/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    {{ user.username }}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-10">{{ user.username }}</div>
+            <div class="col"><a href="{% url 'account:logout' %}">Выйти</a></div>
+        </div>
+        <div class="row"><h1>Ваша комната: {{ room.title }}</h1></div>
+
+        <div class="row">
+        <table class="table">
+            <tr>
+                <th>Логин</th>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Должность</th>
+            </tr>
+            {% for u in staff %}
+                <tr>
+                    <td>{{ u.username }}</td>
+                    <td>{{ u.first_name }}</td>
+                    <td>{{ u.last_name }}</td>
+                    <td>{{ u.position }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+            <form action="{% url 'account:add_staff' %}" method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button type="submit" class="btn btn-primary">Добавить</button>
+            </form>
+        </div>
+    {{ form.non_field_errors }}
+    {{ form.staff.errors }}
+
+    </div>
+{% endblock %}
